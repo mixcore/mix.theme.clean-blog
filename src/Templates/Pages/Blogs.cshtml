@@ -1,13 +1,8 @@
-@using Mix.Cms.Lib
-@using Mix.Cms.Lib.Services
 @model Mix.Cms.Lib.ViewModels.MixPages.ReadMvcViewModel
 @{ 
+    string culture  = ViewBag.culture as string;
    string assetFolder = MixCmsHelper.GetAssetFolder(ViewBag.culture); 
    string templateFolder = MixCmsHelper.GetTemplateFolder(ViewBag.culture);
-   var posts = await Mix.Cms.Lib.ViewModels.MixPosts.ReadViewModel.Repository.GetModelListAsync(
-       "CreatedDateTime", Mix.Heart.Enums.MixHeartEnums.DisplayDirection.Desc,
-       20, 0
-   );
 }
 @*
     <!-- Get Configuration -->
@@ -33,7 +28,8 @@
 <div id="simple-blog-app" class="container">
     <div class="row" id="post-list">
         <div class="col-lg-8 col-md-10 mx-auto">        
-            @foreach(var post in posts.Data.Items){
+            @foreach(var item in Model.Posts.Items){
+                var post = item.Post;
                 <div class="post-preview">
                     <a href="/post/@post.Id/@post.SeoTitle">
                     <h2 class="post-title">
@@ -48,7 +44,7 @@
                     on @post.CreatedDateTime.ToShortDateString()</p>
                 </div>
             }
-            <post-list page-size="20" page-index="1" total-page="@posts.Data.TotalPage"></post-list>
+            <post-list page-size="20" page-index="1" total-page="@Model.Posts.TotalPage"></post-list>
         </div>
     </div>
 </div>
